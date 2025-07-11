@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "stylehound-api-docs",
     "public": "build",
     "ignore": [
       "firebase.json",
