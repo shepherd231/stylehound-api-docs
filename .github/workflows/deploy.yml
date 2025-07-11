@@ -20,10 +20,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-pages-artifact@v3
         with:
-          name: github-pages
-          path: build
+          path: build/
 
   # Deploy job
   deploy:
