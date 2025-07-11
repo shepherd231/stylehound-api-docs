@@ -1,0 +1,10 @@
+{
+  "version.label": {
+    "message": "Alpha",
+    "description": "The label for version 0.0.1"
+  },
+  "sidebar.sidebar.category.Getting Started": {
+    "message": "Getting Started",
+    "description": "The label for category Getting Started in sidebar sidebar"
+  }
+}

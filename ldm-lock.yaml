@@ -1,0 +1,19 @@
+version: '1'
+dependencies:
+  canary.openapi.yaml:
+    uri: github+stylehound-api:///apps/api-spec/dist/openapi.yaml:latest
+    version: eb5ae7cd91cc5c76b6c1f835c4108e6be15614c6
+    destinations:
+      - src/pages/api/next/docs/en.openapi.yaml
+    artifacts:
+      .:
+        hash: 3c7afb3e3b00902eaa2229cd5c05bc403ec3310a068ce496b6d5d3cb3770312f
+  openapi.yaml:
+    uri: >-
+      github+stylehound-api:///apps/api-spec/dist/openapi.yaml:eb5ae7cd91cc5c76b6c1f835c4108e6be15614c6
+    version: eb5ae7cd91cc5c76b6c1f835c4108e6be15614c6
+    destinations:
+      - src/pages/api/docs/en.openapi.yaml
+    artifacts:
+      .:
+        hash: 3c7afb3e3b00902eaa2229cd5c05bc403ec3310a068ce496b6d5d3cb3770312f

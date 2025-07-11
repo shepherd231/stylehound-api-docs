@@ -1,0 +1,1590 @@
+openapi: 3.0.0
+info:
+  title: Stylehound Search API
+  summary: The Stylehound Search API lets you search, configure, and manage your indexes and records.
+  version: 0.0.1
+  description: |2-
+      # Base URLs
+      The base URL for requests to the Search API is:
+
+      - `https://{PROJECT_ID}.api.stylehound.com`
+      
+      The endpoint will provide high availability by distributing requests with load balancing.
+
+      **All requests must use HTTPS.**
+
+      # Authentication
+      To authenticate your API requests, add these headers:
+
+      - `x-stylehound-api-key`. An API key with the necessary permissions to make the request. The required access control list (ACL) to make a request is listed in each endpoint's reference.
+
+      You can find your application ID and API key in the Stylehound dashboard.
+
+      # Request format
+      Depending on the endpoint, request bodies are either JSON objects or arrays of JSON objects,
+
+      # Parameters
+      Parameters are passed as query parameters for GET and DELETE requests, and in the request body for POST and PUT requests.
+
+      Query parameters must be [URL-encoded](https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding). 
+      Non-ASCII characters must be UTF-8 encoded. 
+      Plus characters (+) are interpreted as spaces. 
+      Arrays as query parameters must be a comma-separated string.
+
+      # Response status and errors
+      The Search API returns JSON responses. 
+      Since JSON doesn't guarantee any specific ordering, don't rely on the order of attributes in the API response.
+
+      Successful responses return a 2xx status. 
+      Client errors return a 4xx status. 
+      Server errors are indicated by a 5xx status. 
+      Error responses have a message property with more information.
+
+      # Version
+      The current version of the Search API is version 1, as indicated by the /1/ in each endpoint's URL.
+tags:
+  - name: Keys
+    description: |2-
+        Manage your API keys.
+        
+        API requests must be authenticated with an API key. 
+        Each API Key has a role that determines the permissions for the API key.
+        
+        Related guide: API keys.
+    x-displayName: API Keys
+  - name: Search
+    description: '  Searches a single index and returns matching search results (hits).'
+  - name: Records
+    description: |2-
+        Add, update, and delete records from your indices.
+        
+        Records are individual items in your index.
+        When they match a search query, they're returned as search results.
+        Records are JSON objects, following the schema defined in your index settings.
+  - name: Indexes
+    description: |2-
+        Manage your indices and index settings.
+        
+        Indices are copies of your data that are stored on Stylehound's servers.
+        They're optimal data structures for fast search and are made up of records and settings.
+paths:
+  /1/indexes:
+    post:
+      operationId: createIndex
+      summary: Create a new index
+      description: |-
+        Create a new index.
+
+        required role: "admin"
+      parameters: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Indexes.Index'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Indexes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Indexes.CreateInput'
+      security:
+        - ApiKeyAuth: []
+    get:
+      operationId: listIndexes
+      summary: List all indices
+      description: |-
+        List all indices in the project.
+
+        required role: "viewer" or higher
+      parameters:
+        - $ref: '#/components/parameters/Indexes.ListInput.offset'
+        - $ref: '#/components/parameters/Indexes.ListInput.limit'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Indexes.Index'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Indexes
+      security:
+        - ApiKeyAuth: []
+  /1/indexes/{indexName}:
+    delete:
+      operationId: deleteIndex
+      summary: Delete an index by its name
+      description: |-
+        Delete an index by its name.
+
+        This operation will permanently delete the index and all its records.
+      parameters:
+        - name: indexName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Indexes.Tasks.DeleteOutput'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Indexes
+      security:
+        - ApiKeyAuth: []
+  /1/indexes/{indexName}/records:
+    post:
+      operationId: createRecord
+      summary: Create a new record (with auto-generated ID)
+      description: |-
+        Create a new record in the specified index.
+
+        required role: "editor" or higher
+      parameters:
+        - name: indexName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Records.CreateTaskOutput'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Records
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: {}
+      security:
+        - ApiKeyAuth: []
+    get:
+      operationId: listRecords
+      summary: List records
+      description: |-
+        List all records in the specified index.
+
+        required role: "viewer" or higher
+      parameters:
+        - name: indexName
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Records.ListInput.offset'
+        - $ref: '#/components/parameters/Records.ListInput.limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: {}
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Records
+      security:
+        - ApiKeyAuth: []
+    delete:
+      operationId: deleteRecords
+      summary: Delete multiple records
+      description: |-
+        Delete multiple records from the specified index.
+
+        This operation will remove the specified records from the index.
+        This operation is useful for bulk deletions of records that match certain criteria.
+
+        required role: "editor" or higher
+      parameters:
+        - name: indexName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Records.DeleteTaskOutput'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Records
+      security:
+        - ApiKeyAuth: []
+  /1/indexes/{indexName}/records/batch:
+    post:
+      operationId: createBatchOperationOnRecords
+      summary: Perform batch operations on records
+      description: |-
+        Perform batch operations on records in the specified index.
+        This operation allows you to perform multiple operations (create, update, delete) in a single request.
+
+        required role: "editor" or higher
+      parameters:
+        - name: indexName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Records.Batch.OperateOutput'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Records
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Records.Batch.OperateInput'
+      security:
+        - ApiKeyAuth: []
+  /1/indexes/{indexName}/records/{recordId}:
+    get:
+      operationId: getRecord
+      summary: Get a record by its ID
+      description: |-
+        Retrieve a record by its ID from the specified index.
+
+        required role: "viewer" or higher
+      parameters:
+        - name: indexName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: recordId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Records
+      security:
+        - ApiKeyAuth: []
+    put:
+      operationId: upsertRecord
+      summary: Add or replace a record
+      description: |-
+        Add or replace a record in the specified index.
+
+        This operation will create a new record if it doesn't exist,
+        or update the existing record if it does.
+
+        required role: "editor" or higher
+      parameters:
+        - name: indexName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: recordId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/Records.CreateTaskOutput'
+                  - $ref: '#/components/schemas/Records.UpdateTaskOutput'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Records
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: {}
+      security:
+        - ApiKeyAuth: []
+    delete:
+      operationId: deleteRecordById
+      summary: Delete a record by its ID
+      description: |-
+        Delete a record by its ID from the specified index.
+
+        This operation will remove the record from the index.
+
+        required role: "editor" or higher
+      parameters:
+        - name: indexName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: recordId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Records.DeleteTaskOutput'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Records
+      security:
+        - ApiKeyAuth: []
+  /1/indexes/{indexName}/search:
+    get:
+      operationId: searchOnIndex
+      summary: Search for records in an index
+      description: |-
+        Search for records in the specified index.
+
+        This operation allows you to perform a search query against the records in the index,
+        returning the records that match the search criteria.
+
+        required role: "viewer" or higher
+      parameters:
+        - name: indexName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: input
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Search.SearchInput'
+          explode: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Search.SearchOutput'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Search
+      security:
+        - ApiKeyAuth: []
+  /1/indexes/{indexName}/settings:
+    get:
+      operationId: getIndexSettings
+      summary: Get the settings of an index
+      description: |-
+        Get the settings of an index.
+
+        required role: "viewer" or higher
+      parameters:
+        - name: indexName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stylehound.Model.IndexSettings'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Indexes
+      security:
+        - ApiKeyAuth: []
+    put:
+      operationId: updateIndexSettings
+      summary: Update the settings of an index
+      description: |-
+        Update the settings of an index.
+
+        required role: "editor" or higher
+      parameters:
+        - name: indexName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stylehound.Model.IndexSettings'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Indexes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Indexes.Settings.UpdateInput'
+      security:
+        - ApiKeyAuth: []
+  /1/indexes/{indexName}/tasks/{taskId}:
+    get:
+      operationId: getIndexTask
+      summary: Get the status of a task
+      description: |-
+        Checks the status of a given task.
+
+        Indexing tasks are asynchronous.
+        When you add, update, or delete records or indices,
+        a task is created on a queue and completed depending on the load on the server.
+
+        The indexing tasks' responses include a task ID that you can use to check the status.
+
+        required role: "viewer" or higher
+      parameters:
+        - name: indexName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Indexes.Tasks.Task'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Indexes
+      security:
+        - ApiKeyAuth: []
+  /1/keys:
+    get:
+      operationId: listApiKeys
+      summary: List all API keys
+      description: |-
+        Lists all API keys associated with your Stylehound application.
+
+        required role: "admin"
+      parameters:
+        - $ref: '#/components/parameters/Keys.ListInput.offset'
+        - $ref: '#/components/parameters/Keys.ListInput.limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - value
+                    - role
+                    - createdAt
+                  properties:
+                    value:
+                      type: string
+                      description: API Key value.
+                    role:
+                      type: string
+                      enum:
+                        - viewer
+                        - editor
+                        - admin
+                      description: |-
+                        The role associated with this API key.
+
+                        Possible values:
+                        - "viewer": Read-only access to the project.
+                        - "editor": Read and write access to the project.
+                        - "admin": Full access to the project, including management of API keys and settings
+                    validity:
+                      type: integer
+                      minimum: 0
+                      description: |-
+                        Duration (in seconds) after which the API key expires.
+                        By default, API keys don't expire.
+                      default: 0
+                    description:
+                      type: string
+                      maxLength: 250
+                      description: A short description of the API key.
+                      default: ''
+                    queryParameter:
+                      type: string
+                      description: |-
+                        Additional query parameter to be enforced on requests using this API key.
+                        This can be useful for restricting access to specific data or functionalities.
+
+                        This option will be ignored if the role is "admin".
+                      default: ''
+                    indexes:
+                      type: array
+                      items:
+                        type: string
+                      description: |-
+                        A list of indexes that this API key has access to.
+                        If not specified, the API key has access to all indexes.
+
+                        This option will be ignored if the role is "admin".
+                      default: []
+                    createdAt:
+                      type: string
+                      format: date-time
+                  description: The template for omitting properties.
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Keys
+      security:
+        - ApiKeyAuth: []
+    post:
+      operationId: createApiKey
+      summary: Create a new API key
+      description: |-
+        Create a new API key.
+
+        required role: "admin"
+      parameters: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Keys.CreateOutput'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Keys
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Keys.CreateInput'
+      security:
+        - ApiKeyAuth: []
+  /1/keys/{id}:
+    get:
+      operationId: readApiKey
+      summary: Read details of a specific API key
+      description: |-
+        Read details of a specific API key.
+
+        required role: "admin"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - value
+                  - role
+                  - createdAt
+                properties:
+                  value:
+                    type: string
+                    description: API Key value.
+                  role:
+                    type: string
+                    enum:
+                      - viewer
+                      - editor
+                      - admin
+                    description: |-
+                      The role associated with this API key.
+
+                      Possible values:
+                      - "viewer": Read-only access to the project.
+                      - "editor": Read and write access to the project.
+                      - "admin": Full access to the project, including management of API keys and settings
+                  validity:
+                    type: integer
+                    minimum: 0
+                    description: |-
+                      Duration (in seconds) after which the API key expires.
+                      By default, API keys don't expire.
+                    default: 0
+                  description:
+                    type: string
+                    maxLength: 250
+                    description: A short description of the API key.
+                    default: ''
+                  queryParameter:
+                    type: string
+                    description: |-
+                      Additional query parameter to be enforced on requests using this API key.
+                      This can be useful for restricting access to specific data or functionalities.
+
+                      This option will be ignored if the role is "admin".
+                    default: ''
+                  indexes:
+                    type: array
+                    items:
+                      type: string
+                    description: |-
+                      A list of indexes that this API key has access to.
+                      If not specified, the API key has access to all indexes.
+
+                      This option will be ignored if the role is "admin".
+                    default: []
+                  createdAt:
+                    type: string
+                    format: date-time
+                description: The template for omitting properties.
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Keys
+      security:
+        - ApiKeyAuth: []
+    put:
+      operationId: updateApiKey
+      summary: Update an existing API key
+      description: |-
+        Updates an existing API key.
+
+        required role: "admin"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Keys.UpdateOutput'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Keys
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Keys.UpdateInput'
+      security:
+        - ApiKeyAuth: []
+    delete:
+      operationId: deleteApiKey
+      summary: Delete an API key
+      description: |-
+        Delete an API key by its ID.
+
+        required role: "admin"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Keys.DeleteOutput'
+        '400':
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Keys
+      security:
+        - ApiKeyAuth: []
+components:
+  parameters:
+    Indexes.ListInput.limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of items to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 100
+        default: 100
+      explode: false
+    Indexes.ListInput.offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        default: 0
+      explode: false
+    Keys.ListInput.limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of items to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 100
+        default: 100
+      explode: false
+    Keys.ListInput.offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        default: 0
+      explode: false
+    Records.ListInput.limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of items to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 10000
+        default: 100
+      explode: false
+    Records.ListInput.offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        default: 0
+      explode: false
+  schemas:
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    Indexes.CreateInput:
+      type: object
+      required:
+        - preset
+      properties:
+        preset:
+          type: string
+          description: |-
+            The preset to use for the index.
+
+            Presets are predefined configurations that optimize the index for specific use cases.
+
+            Currently, "fashion" is the only available and mandatory preset.
+          default: fashion
+      allOf:
+        - type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              minLength: 1
+              maxLength: 64
+              pattern: ^[a-zA-Z0-9_-]+$
+          description: The template for picking properties.
+    Indexes.Index:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+      description: The template for picking properties.
+    Indexes.Settings.UpdateInput:
+      type: object
+      properties:
+        schema:
+          type: object
+          additionalProperties: {}
+          description: |-
+            The schema of the index.
+            This defines the structure of the records that can be stored in the index.
+            It is a JSON schema that describes the fields, types, and validation rules for the records.
+        glossaries:
+          type: object
+          additionalProperties:
+            type: string
+          description: |-
+            Glossaries are terms that the search engine should consider equal.
+            It's in format of a record where the key is the term and the value is a synonym.
+
+            Related guide: Glossaries.
+      description: The template for adding optional properties.
+    Indexes.Tasks.DeleteOutput:
+      type: object
+      required:
+        - taskId
+        - deletedAt
+      properties:
+        taskId:
+          type: integer
+          format: int32
+        deletedAt:
+          type: string
+          format: date-time
+    Indexes.Tasks.Task:
+      type: object
+      required:
+        - status
+        - id
+      properties:
+        status:
+          type: string
+        id:
+          type: string
+      description: The template for picking properties.
+    Keys.CreateInput:
+      type: object
+      required:
+        - role
+      properties:
+        role:
+          type: string
+          enum:
+            - viewer
+            - editor
+            - admin
+          description: |-
+            The role associated with this API key.
+
+            Possible values:
+            - "viewer": Read-only access to the project.
+            - "editor": Read and write access to the project.
+            - "admin": Full access to the project, including management of API keys and settings
+        validity:
+          type: integer
+          minimum: 0
+          description: |-
+            Duration (in seconds) after which the API key expires.
+            By default, API keys don't expire.
+          default: 0
+        description:
+          type: string
+          maxLength: 250
+          description: A short description of the API key.
+          default: ''
+        queryParameter:
+          type: string
+          description: |-
+            Additional query parameter to be enforced on requests using this API key.
+            This can be useful for restricting access to specific data or functionalities.
+
+            This option will be ignored if the role is "admin".
+          default: ''
+        indexes:
+          type: array
+          items:
+            type: string
+          description: |-
+            A list of indexes that this API key has access to.
+            If not specified, the API key has access to all indexes.
+
+            This option will be ignored if the role is "admin".
+          default: []
+      description: The template for omitting properties.
+    Keys.CreateOutput:
+      type: object
+      required:
+        - key
+        - createdAt
+      properties:
+        key:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    Keys.DeleteOutput:
+      type: object
+      required:
+        - deletedAt
+      properties:
+        deletedAt:
+          type: string
+          format: date-time
+    Keys.UpdateInput:
+      type: object
+      required:
+        - role
+      properties:
+        role:
+          type: string
+          enum:
+            - viewer
+            - editor
+            - admin
+          description: |-
+            The role associated with this API key.
+
+            Possible values:
+            - "viewer": Read-only access to the project.
+            - "editor": Read and write access to the project.
+            - "admin": Full access to the project, including management of API keys and settings
+        validity:
+          type: integer
+          minimum: 0
+          description: |-
+            Duration (in seconds) after which the API key expires.
+            By default, API keys don't expire.
+          default: 0
+        description:
+          type: string
+          maxLength: 250
+          description: A short description of the API key.
+          default: ''
+        queryParameter:
+          type: string
+          description: |-
+            Additional query parameter to be enforced on requests using this API key.
+            This can be useful for restricting access to specific data or functionalities.
+
+            This option will be ignored if the role is "admin".
+          default: ''
+        indexes:
+          type: array
+          items:
+            type: string
+          description: |-
+            A list of indexes that this API key has access to.
+            If not specified, the API key has access to all indexes.
+
+            This option will be ignored if the role is "admin".
+          default: []
+      description: The template for picking properties.
+    Keys.UpdateOutput:
+      type: object
+      required:
+        - key
+        - updatedAt
+      properties:
+        key:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+    Records.Batch.OperateInput:
+      type: object
+      required:
+        - requests
+      properties:
+        requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/Records.Batch.OperationRequest'
+    Records.Batch.OperateOutput:
+      type: object
+      required:
+        - taskId
+        - recordIds
+      properties:
+        taskId:
+          type: integer
+          format: int32
+        recordIds:
+          type: array
+          items:
+            type: string
+    Records.Batch.OperationRequest:
+      type: object
+      required:
+        - action
+        - body
+      properties:
+        action:
+          type: string
+        body:
+          type: object
+          additionalProperties: {}
+    Records.CreateTaskOutput:
+      type: object
+      required:
+        - createdAt
+        - taskId
+        - recordId
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        taskId:
+          type: integer
+          format: int32
+        recordId:
+          type: string
+    Records.DeleteManyInput:
+      type: object
+      allOf:
+        - type: object
+          additionalProperties: {}
+    Records.DeleteTaskOutput:
+      type: object
+      required:
+        - taskId
+        - deletedAt
+      properties:
+        taskId:
+          type: integer
+          format: int32
+        deletedAt:
+          type: string
+          format: date-time
+    Records.ListInput:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int32
+          minimum: 0
+          description: The offset of the first item to return.
+          default: 0
+        limit:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 10000
+          description: The maximum number of items to return.
+          default: 100
+      allOf:
+        - type: object
+          additionalProperties: {}
+    Records.UpdateTaskOutput:
+      type: object
+      required:
+        - updatedAt
+        - taskId
+        - recordId
+      properties:
+        updatedAt:
+          type: string
+          format: date-time
+        taskId:
+          type: integer
+          format: int32
+        recordId:
+          type: string
+    Search.SearchInput:
+      type: object
+      required:
+        - query
+        - image
+        - filters
+        - prefer
+      properties:
+        query:
+          type: string
+        image:
+          type: string
+          format: byte
+        filters:
+          type: string
+        prefer:
+          type: string
+    Search.SearchOutput:
+      type: object
+      required:
+        - hits
+      properties:
+        hits:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+    Stylehound.Model.IndexSettings:
+      type: object
+      required:
+        - schema
+        - glossaries
+      properties:
+        schema:
+          type: object
+          additionalProperties: {}
+          description: |-
+            The schema of the index.
+            This defines the structure of the records that can be stored in the index.
+            It is a JSON schema that describes the fields, types, and validation rules for the records.
+        glossaries:
+          type: object
+          additionalProperties:
+            type: string
+          description: |-
+            Glossaries are terms that the search engine should consider equal.
+            It's in format of a record where the key is the term and the value is a synonym.
+
+            Related guide: Glossaries.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-STYLEHOUND-API-KEY
+servers:
+  - url: https://{projectId}.api.stylehound.com
+    description: Stylehound Search API
+    variables:
+      projectId:
+        default: ''
+        description: This refers to `readableId` of `Project`
+x-tagGroups:
+  - name: SEARCH AND INDEXING
+    tags:
+      - Indexes
+      - Records
+      - Search
+  - name: ADMINISTRATION
+    tags:
+      - Keys

@@ -1,0 +1,18 @@
+version: "1"
+
+dependencies:
+  openapi.yaml:
+    uri: "stylehound-api:///apps/api-spec/dist/openapi.yaml"
+    version: eb5ae7cd91cc5c76b6c1f835c4108e6be15614c6
+    destination: src/pages/api/docs/openapi/en.openapi.yaml
+  canary.openapi.yaml:
+    uri: "stylehound-api:///apps/api-spec/dist/openapi.yaml"
+    version: latest
+    destination: src/pages/api/next/docs/openapi/en.openapi.yaml
+
+sources:
+  "stylehound-api":
+    provider: github
+    uri: shepherd231/stylehound-api
+    auth:
+      token: ${GITHUB_TOKEN}

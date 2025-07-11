@@ -1,0 +1,33 @@
+on:
+  push:
+    branches:
+      - gh-pages
+
+name: Deploy to GitHub Pages
+
+jobs:
+  # Deploy job
+  deploy:
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+
+    # Deploy to the gh-pages environment
+    environment:
+      name: gh-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "8.7.6"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - uses: actions/deploy-pages@v4
