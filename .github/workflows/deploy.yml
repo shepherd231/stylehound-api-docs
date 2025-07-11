@@ -19,6 +19,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+        env:
+          DEPLOY_PRIME_URL: https://api.docs.stylehound.xyz
+          DEPLOY_BASE_URL: /
       - uses: "google-github-actions/auth@v2"
         with:
           credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
