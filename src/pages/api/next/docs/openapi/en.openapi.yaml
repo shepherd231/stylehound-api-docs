@@ -110,8 +110,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Indexes.CreateInput'
-      security:
-        - ApiKeyAuth: []
     get:
       operationId: listIndexes
       summary: List all indices
@@ -151,8 +149,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Indexes
-      security:
-        - ApiKeyAuth: []
   /1/indexes/{indexName}:
     delete:
       operationId: deleteIndex
@@ -200,8 +196,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Indexes
-      security:
-        - ApiKeyAuth: []
   /1/indexes/{indexName}/records:
     post:
       operationId: createRecord
@@ -250,8 +244,6 @@ paths:
             schema:
               type: object
               additionalProperties: {}
-      security:
-        - ApiKeyAuth: []
     get:
       operationId: listRecords
       summary: List records
@@ -297,8 +289,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Records
-      security:
-        - ApiKeyAuth: []
     delete:
       operationId: deleteRecords
       summary: Delete multiple records
@@ -348,8 +338,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Records
-      security:
-        - ApiKeyAuth: []
   /1/indexes/{indexName}/records/batch:
     post:
       operationId: createBatchOperationOnRecords
@@ -404,8 +392,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Records.Batch.OperateInput'
-      security:
-        - ApiKeyAuth: []
   /1/indexes/{indexName}/records/{recordId}:
     get:
       operationId: getRecord
@@ -459,8 +445,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Records
-      security:
-        - ApiKeyAuth: []
     put:
       operationId: upsertRecord
       summary: Add or replace a record
@@ -518,8 +502,6 @@ paths:
             schema:
               type: object
               additionalProperties: {}
-      security:
-        - ApiKeyAuth: []
     delete:
       operationId: deleteRecordById
       summary: Delete a record by its ID
@@ -573,8 +555,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Records
-      security:
-        - ApiKeyAuth: []
   /1/indexes/{indexName}/search:
     get:
       operationId: searchOnIndex
@@ -631,8 +611,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Search
-      security:
-        - ApiKeyAuth: []
   /1/indexes/{indexName}/settings:
     get:
       operationId: getIndexSettings
@@ -680,8 +658,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Indexes
-      security:
-        - ApiKeyAuth: []
     put:
       operationId: updateIndexSettings
       summary: Update the settings of an index
@@ -728,8 +704,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Indexes.Settings.UpdateInput'
-      security:
-        - ApiKeyAuth: []
   /1/indexes/{indexName}/tasks/{taskId}:
     get:
       operationId: getIndexTask
@@ -782,8 +756,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Indexes
-      security:
-        - ApiKeyAuth: []
   /1/keys:
     get:
       operationId: listApiKeys
@@ -879,8 +851,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Keys
-      security:
-        - ApiKeyAuth: []
     post:
       operationId: createApiKey
       summary: Create a new API key
@@ -922,8 +892,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Keys.CreateInput'
-      security:
-        - ApiKeyAuth: []
   /1/keys/{id}:
     get:
       operationId: readApiKey
@@ -1027,8 +995,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Keys
-      security:
-        - ApiKeyAuth: []
     put:
       operationId: updateApiKey
       summary: Update an existing API key
@@ -1082,8 +1048,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Keys.UpdateInput'
-      security:
-        - ApiKeyAuth: []
     delete:
       operationId: deleteApiKey
       summary: Delete an API key
@@ -1131,8 +1095,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
         - Keys
-      security:
-        - ApiKeyAuth: []
 components:
   parameters:
     Indexes.ListInput.limit:
@@ -1567,11 +1529,6 @@ components:
             It's in format of a record where the key is the term and the value is a synonym.
 
             Related guide: Glossaries.
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-STYLEHOUND-API-KEY
 servers:
   - url: https://{projectId}.api.stylehound.com
     description: Stylehound Search API

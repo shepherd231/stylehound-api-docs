@@ -86,12 +86,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
+        }
       },
       "get": {
         "operationId": "listIndexes",
@@ -152,11 +147,6 @@
         },
         "tags": [
           "Indexes"
-        ],
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
         ]
       }
     },
@@ -229,11 +219,6 @@
         },
         "tags": [
           "Indexes"
-        ],
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
         ]
       }
     },
@@ -307,12 +292,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
+        }
       },
       "get": {
         "operationId": "listRecords",
@@ -382,11 +362,6 @@
         },
         "tags": [
           "Records"
-        ],
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
         ]
       },
       "delete": {
@@ -457,11 +432,6 @@
         },
         "tags": [
           "Records"
-        ],
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
         ]
       }
     },
@@ -544,12 +514,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
+        }
       }
     },
     "/1/indexes/{indexName}/records/{recordId}": {
@@ -630,11 +595,6 @@
         },
         "tags": [
           "Records"
-        ],
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
         ]
       },
       "put": {
@@ -721,12 +681,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
+        }
       },
       "delete": {
         "operationId": "deleteRecordById",
@@ -804,11 +759,6 @@
         },
         "tags": [
           "Records"
-        ],
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
         ]
       }
     },
@@ -890,11 +840,6 @@
         },
         "tags": [
           "Search"
-        ],
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
         ]
       }
     },
@@ -967,11 +912,6 @@
         },
         "tags": [
           "Indexes"
-        ],
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
         ]
       },
       "put": {
@@ -1042,12 +982,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
+        }
       }
     },
     "/1/indexes/{indexName}/tasks/{taskId}": {
@@ -1117,11 +1052,6 @@
         },
         "tags": [
           "Indexes"
-        ],
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
         ]
       }
     },
@@ -1235,11 +1165,6 @@
         },
         "tags": [
           "Keys"
-        ],
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
         ]
       },
       "post": {
@@ -1301,12 +1226,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
+        }
       }
     },
     "/1/keys/{id}": {
@@ -1429,11 +1349,6 @@
         },
         "tags": [
           "Keys"
-        ],
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
         ]
       },
       "put": {
@@ -1515,12 +1430,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
+        }
       },
       "delete": {
         "operationId": "deleteApiKey",
@@ -1591,11 +1501,6 @@
         },
         "tags": [
           "Keys"
-        ],
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
         ]
       }
     }
@@ -2124,13 +2029,6 @@
             "description": "Glossaries are terms that the search engine should consider equal.\nIt's in format of a record where the key is the term and the value is a synonym.\n\nRelated guide: Glossaries."
           }
         }
-      }
-    },
-    "securitySchemes": {
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "X-STYLEHOUND-API-KEY"
       }
     }
   },
