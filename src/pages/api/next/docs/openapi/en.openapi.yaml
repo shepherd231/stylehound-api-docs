@@ -7,7 +7,7 @@ info:
       # Base URLs
       The base URL for requests to the Search API is:
 
-      - `https://{PROJECT_ID}.api.stylehound.com`
+      - `https://{PROJECT_ID}.api.stylehound.xyz`
       
       The endpoint will provide high availability by distributing requests with load balancing.
 
@@ -53,7 +53,7 @@ tags:
         Related guide: API keys.
     x-displayName: API Keys
   - name: Search
-    description: '  Searches a single index and returns matching search results (hits).'
+    description: "  Searches a single index and returns matching search results (hits)."
   - name: Records
     description: |2-
         Add, update, and delete records from your indices.
@@ -78,30 +78,30 @@ paths:
         required role: "admin"
       parameters: []
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Indexes.Index'
-        '400':
+                $ref: "#/components/schemas/Indexes.Index"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Indexes
       requestBody:
@@ -109,7 +109,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Indexes.CreateInput'
+              $ref: "#/components/schemas/Indexes.CreateInput"
     get:
       operationId: listIndexes
       summary: List all indices
@@ -118,35 +118,35 @@ paths:
 
         required role: "viewer" or higher
       parameters:
-        - $ref: '#/components/parameters/Indexes.ListInput.offset'
-        - $ref: '#/components/parameters/Indexes.ListInput.limit'
+        - $ref: "#/components/parameters/Indexes.ListInput.offset"
+        - $ref: "#/components/parameters/Indexes.ListInput.limit"
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Indexes.Index'
-        '400':
+                  $ref: "#/components/schemas/Indexes.Index"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Indexes
   /1/indexes/{indexName}:
@@ -164,36 +164,36 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Indexes.Tasks.DeleteOutput'
-        '400':
+                $ref: "#/components/schemas/Indexes.Tasks.DeleteOutput"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '404':
+                $ref: "#/components/schemas/Error"
+        "404":
           description: Resource not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Indexes
   /1/indexes/{indexName}/records:
@@ -211,30 +211,30 @@ paths:
           schema:
             type: string
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Records.CreateTaskOutput'
-        '400':
+                $ref: "#/components/schemas/Records.CreateTaskOutput"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Records
       requestBody:
@@ -257,10 +257,10 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: '#/components/parameters/Records.ListInput.offset'
-        - $ref: '#/components/parameters/Records.ListInput.limit'
+        - $ref: "#/components/parameters/Records.ListInput.offset"
+        - $ref: "#/components/parameters/Records.ListInput.limit"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -269,24 +269,24 @@ paths:
                 items:
                   type: object
                   additionalProperties: {}
-        '400':
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Records
     delete:
@@ -306,36 +306,36 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Records.DeleteTaskOutput'
-        '400':
+                $ref: "#/components/schemas/Records.DeleteTaskOutput"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '404':
+                $ref: "#/components/schemas/Error"
+        "404":
           description: Resource not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Records
   /1/indexes/{indexName}/records/batch:
@@ -354,36 +354,36 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Records.Batch.OperateOutput'
-        '400':
+                $ref: "#/components/schemas/Records.Batch.OperateOutput"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '404':
+                $ref: "#/components/schemas/Error"
+        "404":
           description: Resource not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Records
       requestBody:
@@ -391,7 +391,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Records.Batch.OperateInput'
+              $ref: "#/components/schemas/Records.Batch.OperateInput"
   /1/indexes/{indexName}/records/{recordId}:
     get:
       operationId: getRecord
@@ -412,37 +412,37 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
                 additionalProperties: {}
-        '400':
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '404':
+                $ref: "#/components/schemas/Error"
+        "404":
           description: Resource not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Records
     put:
@@ -467,32 +467,32 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: '#/components/schemas/Records.CreateTaskOutput'
-                  - $ref: '#/components/schemas/Records.UpdateTaskOutput'
-        '400':
+                  - $ref: "#/components/schemas/Records.CreateTaskOutput"
+                  - $ref: "#/components/schemas/Records.UpdateTaskOutput"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Records
       requestBody:
@@ -523,36 +523,36 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Records.DeleteTaskOutput'
-        '400':
+                $ref: "#/components/schemas/Records.DeleteTaskOutput"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '404':
+                $ref: "#/components/schemas/Error"
+        "404":
           description: Resource not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Records
   /1/indexes/{indexName}/search:
@@ -576,39 +576,39 @@ paths:
           in: query
           required: true
           schema:
-            $ref: '#/components/schemas/Search.SearchInput'
+            $ref: "#/components/schemas/Search.SearchInput"
           explode: false
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Search.SearchOutput'
-        '400':
+                $ref: "#/components/schemas/Search.SearchOutput"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '404':
+                $ref: "#/components/schemas/Error"
+        "404":
           description: Resource not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Search
   /1/indexes/{indexName}/settings:
@@ -626,36 +626,36 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Stylehound.Model.IndexSettings'
-        '400':
+                $ref: "#/components/schemas/Stylehound.Model.IndexSettings"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '404':
+                $ref: "#/components/schemas/Error"
+        "404":
           description: Resource not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Indexes
     put:
@@ -672,30 +672,30 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Stylehound.Model.IndexSettings'
-        '400':
+                $ref: "#/components/schemas/Stylehound.Model.IndexSettings"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Indexes
       requestBody:
@@ -703,7 +703,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Indexes.Settings.UpdateInput'
+              $ref: "#/components/schemas/Indexes.Settings.UpdateInput"
   /1/indexes/{indexName}/tasks/{taskId}:
     get:
       operationId: getIndexTask
@@ -730,30 +730,30 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Indexes.Tasks.Task'
-        '400':
+                $ref: "#/components/schemas/Indexes.Tasks.Task"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Indexes
   /1/keys:
@@ -765,10 +765,10 @@ paths:
 
         required role: "admin"
       parameters:
-        - $ref: '#/components/parameters/Keys.ListInput.offset'
-        - $ref: '#/components/parameters/Keys.ListInput.limit'
+        - $ref: "#/components/parameters/Keys.ListInput.offset"
+        - $ref: "#/components/parameters/Keys.ListInput.limit"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -808,7 +808,7 @@ paths:
                       type: string
                       maxLength: 250
                       description: A short description of the API key.
-                      default: ''
+                      default: ""
                     queryParameter:
                       type: string
                       description: |-
@@ -816,7 +816,7 @@ paths:
                         This can be useful for restricting access to specific data or functionalities.
 
                         This option will be ignored if the role is "admin".
-                      default: ''
+                      default: ""
                     indexes:
                       type: array
                       items:
@@ -831,24 +831,24 @@ paths:
                       type: string
                       format: date-time
                   description: The template for omitting properties.
-        '400':
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Keys
     post:
@@ -860,30 +860,30 @@ paths:
         required role: "admin"
       parameters: []
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Keys.CreateOutput'
-        '400':
+                $ref: "#/components/schemas/Keys.CreateOutput"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Keys
       requestBody:
@@ -891,7 +891,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Keys.CreateInput'
+              $ref: "#/components/schemas/Keys.CreateInput"
   /1/keys/{id}:
     get:
       operationId: readApiKey
@@ -908,7 +908,7 @@ paths:
             type: integer
             format: int32
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -946,7 +946,7 @@ paths:
                     type: string
                     maxLength: 250
                     description: A short description of the API key.
-                    default: ''
+                    default: ""
                   queryParameter:
                     type: string
                     description: |-
@@ -954,7 +954,7 @@ paths:
                       This can be useful for restricting access to specific data or functionalities.
 
                       This option will be ignored if the role is "admin".
-                    default: ''
+                    default: ""
                   indexes:
                     type: array
                     items:
@@ -969,30 +969,30 @@ paths:
                     type: string
                     format: date-time
                 description: The template for omitting properties.
-        '400':
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '404':
+                $ref: "#/components/schemas/Error"
+        "404":
           description: Resource not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Keys
     put:
@@ -1010,36 +1010,36 @@ paths:
             type: integer
             format: int32
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Keys.UpdateOutput'
-        '400':
+                $ref: "#/components/schemas/Keys.UpdateOutput"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '404':
+                $ref: "#/components/schemas/Error"
+        "404":
           description: Resource not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Keys
       requestBody:
@@ -1047,7 +1047,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Keys.UpdateInput'
+              $ref: "#/components/schemas/Keys.UpdateInput"
     delete:
       operationId: deleteApiKey
       summary: Delete an API key
@@ -1063,36 +1063,36 @@ paths:
             type: integer
             format: int32
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Keys.DeleteOutput'
-        '400':
+                $ref: "#/components/schemas/Keys.DeleteOutput"
+        "400":
           description: Bad Request or request arguments
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '403':
+                $ref: "#/components/schemas/Error"
+        "403":
           description: Method not allowed with this API key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '404':
+                $ref: "#/components/schemas/Error"
+        "404":
           description: Resource not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '422':
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Invalid data in request arguments or body
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
       tags:
         - Keys
 components:
@@ -1282,7 +1282,7 @@ components:
           type: string
           maxLength: 250
           description: A short description of the API key.
-          default: ''
+          default: ""
         queryParameter:
           type: string
           description: |-
@@ -1290,7 +1290,7 @@ components:
             This can be useful for restricting access to specific data or functionalities.
 
             This option will be ignored if the role is "admin".
-          default: ''
+          default: ""
         indexes:
           type: array
           items:
@@ -1350,7 +1350,7 @@ components:
           type: string
           maxLength: 250
           description: A short description of the API key.
-          default: ''
+          default: ""
         queryParameter:
           type: string
           description: |-
@@ -1358,7 +1358,7 @@ components:
             This can be useful for restricting access to specific data or functionalities.
 
             This option will be ignored if the role is "admin".
-          default: ''
+          default: ""
         indexes:
           type: array
           items:
@@ -1389,7 +1389,7 @@ components:
         requests:
           type: array
           items:
-            $ref: '#/components/schemas/Records.Batch.OperationRequest'
+            $ref: "#/components/schemas/Records.Batch.OperationRequest"
     Records.Batch.OperateOutput:
       type: object
       required:
@@ -1530,11 +1530,11 @@ components:
 
             Related guide: Glossaries.
 servers:
-  - url: https://{projectId}.api.stylehound.com
+  - url: https://{projectId}.api.stylehound.xyz
     description: Stylehound Search API
     variables:
       projectId:
-        default: ''
+        default: ""
         description: This refers to `readableId` of `Project`
 x-tagGroups:
   - name: SEARCH AND INDEXING

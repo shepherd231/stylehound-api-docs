@@ -124,7 +124,7 @@ const config: Config = {
             },
             {
               label: "Stylehound",
-              href: "https://stylehound.com",
+              href: "https://stylehound.xyz",
             },
           ],
         },

@@ -7,7 +7,7 @@ info:
       # Base URLs
       The base URL for requests to the Search API is:
 
-      - `https://{PROJECT_ID}.api.stylehound.com`
+      - `https://{PROJECT_ID}.api.stylehound.xyz`
       
       The endpoint will provide high availability by distributing requests with load balancing.
 
@@ -1530,7 +1530,7 @@ components:
 
             Related guide: Glossaries.
 servers:
-  - url: https://{projectId}.api.stylehound.com
+  - url: https://{projectId}.api.stylehound.xyz
     description: Stylehound Search API
     variables:
       projectId:
