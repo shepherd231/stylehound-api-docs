@@ -855,15 +855,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "input",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Search.SearchInput"
-            },
-            "explode": false
           }
         ],
         "responses": {
@@ -920,7 +911,17 @@
         },
         "tags": [
           "Search"
-        ]
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Search.SearchInput"
+              }
+            }
+          }
+        }
       }
     },
     "/1/indexes/{indexName}/settings": {
@@ -2069,22 +2070,20 @@
         "required": [
           "query",
           "image",
-          "filters",
-          "prefer"
+          "filters"
         ],
         "properties": {
           "query": {
-            "type": "string"
+            "type": "string",
+            "description": "The search query string."
           },
           "image": {
             "type": "string",
-            "format": "byte"
+            "description": "The url of the string of image for the search."
           },
           "filters": {
-            "type": "string"
-          },
-          "prefer": {
-            "type": "string"
+            "type": "string",
+            "description": "Filters to apply to the search results.\n\nRelated guide: Filtering"
           }
         }
       },
