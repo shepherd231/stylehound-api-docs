@@ -196,6 +196,61 @@ paths:
                 $ref: "#/components/schemas/Error"
       tags:
         - Indexes
+  /1/indexes/{indexName}/facets/{facetName}/values:
+    get:
+      operationId: listFacetValues
+      summary: List facet values
+      description: |-
+        List facet values for a specific facet in the index.
+
+        Attributes for faceting can be defined in the index schema.
+        `facetName` should match the name of the facet attribute defined in the index schema.
+
+        required role: "viewer" or higher
+      parameters:
+        - name: indexName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: facetName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Search.ListFacetOutput"
+        "400":
+          description: Bad Request or request arguments
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Method not allowed with this API key
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
+          description: Invalid data in request arguments or body
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      tags:
+        - Search
   /1/indexes/{indexName}/records:
     post:
       operationId: createRecord
@@ -556,7 +611,7 @@ paths:
       tags:
         - Records
   /1/indexes/{indexName}/search:
-    get:
+    post:
       operationId: searchOnIndex
       summary: Search for records in an index
       description: |-
@@ -1480,6 +1535,15 @@ components:
           format: int32
         recordId:
           type: string
+    Search.ListFacetOutput:
+      type: object
+      required:
+        - values
+      properties:
+        values:
+          type: array
+          items:
+            type: string
     Search.SearchInput:
       type: object
       required:

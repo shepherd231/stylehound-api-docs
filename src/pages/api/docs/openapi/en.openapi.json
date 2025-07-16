@@ -222,6 +222,86 @@
         ]
       }
     },
+    "/1/indexes/{indexName}/facets/{facetName}/values": {
+      "get": {
+        "operationId": "listFacetValues",
+        "summary": "List facet values",
+        "description": "List facet values for a specific facet in the index.\n\nAttributes for faceting can be defined in the index schema.\n`facetName` should match the name of the facet attribute defined in the index schema.\n\nrequired role: \"viewer\" or higher",
+        "parameters": [
+          {
+            "name": "indexName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "facetName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Search.ListFacetOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request or request arguments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Method not allowed with this API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid data in request arguments or body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Search"
+        ]
+      }
+    },
     "/1/indexes/{indexName}/records": {
       "post": {
         "operationId": "createRecord",
@@ -763,7 +843,7 @@
       }
     },
     "/1/indexes/{indexName}/search": {
-      "get": {
+      "post": {
         "operationId": "searchOnIndex",
         "summary": "Search for records in an index",
         "description": "Search for records in the specified index.\n\nThis operation allows you to perform a search query against the records in the index,\nreturning the records that match the search criteria.\n\nrequired role: \"viewer\" or higher",
@@ -1967,6 +2047,20 @@
           },
           "recordId": {
             "type": "string"
+          }
+        }
+      },
+      "Search.ListFacetOutput": {
+        "type": "object",
+        "required": [
+          "values"
+        ],
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
