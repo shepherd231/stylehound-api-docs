@@ -1268,17 +1268,17 @@ components:
     Indexes.Settings.UpdateInput:
       type: object
       properties:
+        primaryLanguage:
+          type: string
+          description: |-
+            The primary language of the index.
+            If it's other than english, the engine will translate queries to the primary language.
         schema:
-          type: object
-          additionalProperties: {}
           description: |-
             The schema of the index.
             This defines the structure of the records that can be stored in the index.
             It is a JSON schema that describes the fields, types, and validation rules for the records.
         glossaries:
-          type: object
-          additionalProperties:
-            type: string
           description: |-
             Glossaries are terms that the search engine should consider equal.
             It's in format of a record where the key is the term and the value is a synonym.
@@ -1535,6 +1535,31 @@ components:
           format: int32
         recordId:
           type: string
+    Search.CropConfig:
+      type: object
+      required:
+        - left
+        - top
+        - right
+        - bottom
+      properties:
+        left:
+          type: integer
+        top:
+          type: integer
+        right:
+          type: integer
+        bottom:
+          type: integer
+    Search.ImageInfo:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+        crop:
+          $ref: "#/components/schemas/Search.CropConfig"
     Search.ListFacetOutput:
       type: object
       required:
@@ -1546,10 +1571,6 @@ components:
             type: string
     Search.SearchInput:
       type: object
-      required:
-        - query
-        - image
-        - filters
       properties:
         query:
           type: string
@@ -1557,8 +1578,12 @@ components:
         image:
           type: string
           description: The url of the string of image for the search.
-        filters:
-          type: string
+        filter:
+          anyOf:
+            - type: string
+            - type: array
+              items:
+                type: string
           description: |-
             Filters to apply to the search results.
 
@@ -1576,20 +1601,21 @@ components:
     Stylehound.Model.IndexSettings:
       type: object
       required:
+        - primaryLanguage
         - schema
         - glossaries
       properties:
+        primaryLanguage:
+          type: string
+          description: |-
+            The primary language of the index.
+            If it's other than english, the engine will translate queries to the primary language.
         schema:
-          type: object
-          additionalProperties: {}
           description: |-
             The schema of the index.
             This defines the structure of the records that can be stored in the index.
             It is a JSON schema that describes the fields, types, and validation rules for the records.
         glossaries:
-          type: object
-          additionalProperties:
-            type: string
           description: |-
             Glossaries are terms that the search engine should consider equal.
             It's in format of a record where the key is the term and the value is a synonym.

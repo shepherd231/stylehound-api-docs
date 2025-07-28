@@ -3,7 +3,7 @@ version: "1"
 dependencies:
   openapi.yaml:
     uri: "stylehound-api:///apps/api-spec/dist/openapi.yaml"
-    version: d30c0d36aa53db6e3b488263abde6f97b4c8f555
+    version: d808c3b17be1f7341bb4078f683f54b5d51c64f5
     destination: src/pages/api/docs/openapi/en.openapi.yaml
   canary.openapi.yaml:
     uri: "stylehound-api:///apps/api-spec/dist/openapi.yaml"
